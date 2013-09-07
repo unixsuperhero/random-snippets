@@ -1,5 +1,21 @@
 #!/bin/bash
 
+cat <<"METADATA" >/dev/null
+  NAME: remote_links
+  DESCRIPTION:
+    Do various things with the remote repos configured in
+  your .git/config file:
+
+    - List them
+    - Filter the list with a regex
+    - Open the first link in your browser, filter to
+    target a specific link
+
+  AUTHOR: Joshua Toyota
+  DATE: 2013-09-07 00:00:00
+
+METADATA
+
 links="$(git remote -v | sed 's/:/\//;s/\(^[^[:space:]]*\)[[:space:]].*@\(.*\)$/http:\/\/\2  \# \1/;s/\.git[[:space:]].*\(  \#.*\)$/\1/' | uniq)"
 
 case "$1" in
