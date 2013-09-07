@@ -1,0 +1,39 @@
+#!/bin/bash
+
+watched_file="watched.grep"
+
+function vlc_next_episode()
+{
+  [[ ! -a "$watched_file" ]] && echo "Watched Grep File (${watched_file}) Not Found!!!" && echo "$watched_file" >>$watched_file
+
+  next="$(ls -1 | egrep -vf "$watched_file" | head -1)"
+
+  if [[ -n "$next" ]]; then
+    next_episode_display_message ">" "next file = $next"
+
+    ## Passing any args results in a dry-run
+    if [[ -z "$1" ]]; then
+      echo "$next" >>$watched_file
+      open -a vlc "$next"
+    fi
+
+  else
+    next_episode_display_message "!" "No Pending Episodes"
+  fi
+}
+
+function next_episode_display_message()
+{
+    echo
+    echo "$1$1$(echo "$2" | sed 's/./-/g')$1$1"
+    echo "  $2"
+    echo "$1$1$(echo "$2" | sed 's/./-/g')$1$1"
+    echo
+}
+
+if [[ "$1" == "--edit" ]]; then
+  vim "$0"
+else
+  vlc_next_episode $@
+fi
+
