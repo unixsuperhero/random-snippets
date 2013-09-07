@@ -3,7 +3,7 @@
 require 'uri'
 extend URI::Escape
 
-url = ARGV[0].dup
+url = ARGV[0].dup if ARGV[0].present?
 url ||= `pbpaste`
 
 url.gsub!(/[?].*|.*[\/]/, '')
