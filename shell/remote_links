@@ -1,0 +1,28 @@
+#!/bin/bash
+
+links="$(git remote -v | sed 's/:/\//;s/\(^[^[:space:]]*\)[[:space:]].*@\(.*\)$/http:\/\/\2  \# \1/;s/\.git[[:space:]].*\(  \#.*\)$/\1/' | uniq)"
+
+case "$1" in
+
+  '')
+    echo "$links"
+  ;;
+
+  '--edit')
+    vim "$0"
+  ;;
+
+  'open')
+    if [[ -z "$2" ]]; then
+      open $(echo "$links" | head -1 | sed 's/  .*$//')
+    else
+      open $(echo "$links" | grep -i "$2" | head -1 | sed 's/  .*$//')
+    fi
+  ;;
+
+  *)
+    echo "$links" | grep -i "$1" | head -1
+  ;;
+
+esac
+
