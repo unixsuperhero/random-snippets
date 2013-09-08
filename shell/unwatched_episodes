@@ -1,0 +1,37 @@
+#!/bin/bash
+
+cat <<"METADATA" >/dev/null
+  NAME: unwatched_episodes
+  DESCRIPTION:
+    Go through all anime folders and list episodes that haven't been watched
+  according to watched.grep.
+
+  AUTHOR: Joshua Toyota
+  DATE: 2013-09-08 19:32:19
+
+METADATA
+
+watched_file="watched.grep"
+
+start_dir="$(pwd)"
+
+cd ~/Desktop/Anime
+
+for series in */
+do
+  echo
+  echo "[ $series ]"
+  (
+    cd "$series"
+    episodes="$(ls -1 | grep -vf $watched_file)"
+
+    [[ -z "$episodes" ]] && echo " !!!--- No Pending Episodes ---!!!"
+
+    echo "$episodes"
+  )
+done
+
+echo
+
+cd "$start_dir"
+
