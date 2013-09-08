@@ -17,21 +17,23 @@ start_dir="$(pwd)"
 
 cd ~/Desktop/Anime
 
+echo
+
 for series in */
 do
-  echo
-  echo "[ $series ]"
   (
     cd "$series"
-    episodes="$(ls -1 | grep -vf $watched_file)"
+    episodes="$(ls -1 | grep -vf $watched_file 2>/dev/null)"
 
-    [[ -z "$episodes" ]] && echo " !!!--- No Pending Episodes ---!!!"
+    if [[ -n "$episodes" ]]
+    then
+      echo "[ $series ]"
+      echo "$episodes"
+      echo
+    fi
 
-    echo "$episodes"
   )
 done
-
-echo
 
 cd "$start_dir"
 
