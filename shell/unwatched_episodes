@@ -21,18 +21,7 @@ echo
 
 for series in */
 do
-  (
-    cd "$series"
-    episodes="$(ls -1 | grep -vf $watched_file 2>/dev/null)"
-
-    if [[ -n "$episodes" ]]
-    then
-      echo "[ $series ]"
-      echo "$episodes"
-      echo
-    fi
-
-  )
+  find "${series%/}" -type f | grep -vf "${series}${watched_file}" 2>/dev/null && echo
 done
 
 cd "$start_dir"
