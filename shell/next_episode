@@ -26,7 +26,7 @@ function vlc_next_episode()
 
     ## Passing any args results in a dry-run
     if [[ -z "$1" ]]; then
-      echo "$next" >>$watched_file
+      echo "$next" | sed 's/[^a-zA-Z0-9-]/./g' >>$watched_file
       open -a vlc "$next"
     fi
 
