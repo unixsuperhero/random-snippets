@@ -6,7 +6,8 @@ extend URI::Escape
 url = ARGV[0].dup unless ARGV[0] == nil
 url ||= `pbpaste`
 
-url.gsub!(/[?].*|.*[\/]/, '')
+url.gsub!(/[?].*/,'')
+url.gsub!(/.*[\/]/, '')
 puts decode(url)
 
 __END__
