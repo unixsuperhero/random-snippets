@@ -27,32 +27,31 @@ class FileNamer
     @files = Dir.glob("#{dir}/*")
     @format = pick_format
     @episode = pick_episode_number
-    rename_template
     rename_files
   end
 
+  def confirmed(prompt="Continue...")
+    puts ''
+    print "#{prompt} (1) yes (*) no ? "
+    gets.to_i == 1
+  end
+
   def rename_files
-    rename_list.map do |file|
-      cmd = sprintf('mv "%s" "%s"', file[:before], file[:after])
-      puts "About to run:", "\t'#{cmd}'"
-      print "Is it ok (1) yes (*) no? "
-      ok = gets
-      system(cmd) if ok.to_i == 1
-    end
-  end
-
-  def rename_list
-    @rename_list ||= build_rename_list
-  end
-
-  def build_rename_list
-    @files.keep_if{|f| f =~ /\d/}.map do |file|
+    @files.map do |file|
+      next unless confirmed("Do you want to rename '#{file}'")
       ep = pick_episode_number(file)
-      {
-        before: file,
-        after: rename_template.join( sprintf('%02d', ep.to_i) ),
-      }
+      rename_file file, new_filename(ep)
     end
+  end
+
+  def new_filename ep
+    rename_template.join sprintf('%02d', ep.to_i)
+  end
+
+  def rename_file(from, to)
+    cmd = sprintf('mv "%s" "%s"', from, to)
+    puts "About to run:", "\t'#{cmd}'"
+    system(cmd) if confirmed("Is it ok?")
   end
 
   def list_files
@@ -68,10 +67,9 @@ class FileNamer
 
   def pick_episode_number(filename=@format)
     numbers = filename.split(/\D+/)
-    puts "What is the episode number in:"
-    puts "\t#{filename} "
+    puts "FILENAME => \"#{filename}\""
     list_with_numbers numbers
-    print "Which choice lists the episode: "
+    print "Which choice lists the episode number: "
     ep = gets
     numbers[ep.to_i]
   end
