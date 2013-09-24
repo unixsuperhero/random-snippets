@@ -1,0 +1,22 @@
+#!/bin/bash
+
+cat downloads | head -3 | while read fname
+do
+  url_filename "$fname"
+done
+
+echo "Do these need numbers added? (blank for No) "
+read add_numbers
+
+x=1
+cat downloads | while read file
+do
+  if [[ -z $add_numbers ]]; then
+    echo download \"$file\"
+    download "$file"
+  else
+    echo download \"$file\" \"$(basename \"$(pwd)\") $(printf \"%02d\" $x)\"
+    download "$file" "$(basename "$(pwd)") $(printf "%02d" $x)"
+  fi
+  x=$(( $x + 1 ))
+done
