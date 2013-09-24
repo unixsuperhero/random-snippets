@@ -1,0 +1,37 @@
+#!/bin/bash
+
+watched_file="finished"
+
+function next_chapter()
+{
+  [[ ! -a "$watched_file" ]] && echo "Watched Grep File (${watched_file}) Not Found!!!" && echo "$watched_file" >>$watched_file
+
+  next="$(find . -iname '*.cb?' | egrep -vf "$watched_file" | head -1)"
+
+  if [[ -n "$next" ]]; then
+    next_chapter_display_message ">" "next file = $next"
+
+    ## Passing any args results in a dry-run
+    if [[ -z "$1" ]]; then
+      echo "$next" | sed 's/[^a-zA-Z0-9-]/./g' >>$watched_file
+      open "$next"
+    fi
+  else
+    next_chapter_display_message "!" "No Pending chapters"
+  fi
+}
+
+function next_chapter_display_message()
+{
+    echo
+    echo "$1$1$(echo "$2" | sed 's/./-/g')$1$1"
+    echo "  $2"
+    echo "$1$1$(echo "$2" | sed 's/./-/g')$1$1"
+    echo
+}
+
+if [[ "$1" == "--edit" ]]; then
+  vim "$0"
+else
+  next_chapter $@
+fi
