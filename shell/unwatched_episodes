@@ -22,7 +22,7 @@ echo
 for series in */
 do
   find "${series%/}" -type f | grep -vf "${series}${watched_file}" 2>/dev/null && echo
-done
+done | less
 
 cd "$start_dir"
 
