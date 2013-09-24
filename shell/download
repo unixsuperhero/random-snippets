@@ -13,10 +13,8 @@ cat <<"METADATA" >/dev/null
 
 METADATA
 
-if [[ -z "$1" ]]
-then
-  wget -cO "$(url_filename)" "$(pbpaste)"
-else
-  wget -cO "$(url_filename "$1")" "$1"
-fi
+[[ -z "$1" ]] && link="$(pbpaste)" || link="$1"
+[[ -z "$2" ]] && name="$(url_filename)" || name="$2"
+
+wget -cO "$name" "$link"
 
