@@ -1,7 +1,6 @@
 #!/bin/bash
 
-for z in 1
-do
+function manga_style() {
   cat <<STYLE
     <style type="text/css">
       img {
@@ -16,13 +15,63 @@ do
       }
     </style>
 STYLE
+}
+
+function prev_link() {
+  printf '<a href="%s.html">&lt; Prev</a>' "$1"
+}
+
+function next_link() {
+  printf '<a href="%s.html">Next &gt;</a>' "$1"
+}
+
+function add_to_toc() {
+  printf '<a href="%s.html">%s</a><br/>' "$1" "$1"
+}
+
+function heading() {
+  echo "<hr />"
+  echo "<h1>$1</h1>"
+}
+
+function img_tags() {
+  for b in "${1}/"*
+  do
+    printf '<img src="%s" />' "$b"
+  done
+}
+
+function hr_tag() {
+  echo "<hr />"
+}
+
+i="index"
+p="$i"
+
+for z in 1
+do
+  manga_style >$i
 
   for a in *
   do
-    echo "<h1>$a</h1>"
-    for b in $a/*
-    do
-      printf '<img src="%s" />' "$b"
-    done
+    ih="${i}.html"
+    ph="${p}.html"
+    ah="${a}.html"
+
+    if [[ "$ph" != "$ih" ]]; then
+      next_link "$a" >>"$ph"
+    fi
+
+    add_to_toc "$a" >>"$ih"
+
+    # Work on Current File
+    manga_style >"$ah"
+    prev_link "$p" >>"$ah"
+    hr_tag >>"$ah"
+    heading "$a" >>"$ah"
+    img_tags "$a" >>"$ah"
+    hr_tag >>"$ah"
+    prev_link "$p" >>"$ah"
+    p="$a"
   done
-done >read.html
+done
