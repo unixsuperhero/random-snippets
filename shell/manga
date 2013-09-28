@@ -1,0 +1,28 @@
+#!/bin/bash
+
+for z in 1
+do
+  cat <<STYLE
+    <style type="text/css">
+      img {
+        width: 90%;
+        margin: 10px;
+        text-align: center;
+      }
+      h1 {
+        font-size: 144pt;
+        border: dashed 2px red;
+        color: black;
+      }
+    </style>
+STYLE
+
+  for a in *
+  do
+    echo "<h1>$a</h1>"
+    for b in $a/*
+    do
+      printf '<img src="%s" />' "$b"
+    done
+  done
+done >read.html
