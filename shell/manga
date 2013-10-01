@@ -22,7 +22,7 @@ function prev_link() {
 }
 
 function next_link() {
-  printf '<a href="%s.html">Next &gt;</a>' "$1"
+  printf ' ... <a href="%s.html">Next &gt;</a>' "$1"
 }
 
 function add_to_toc() {
@@ -30,7 +30,7 @@ function add_to_toc() {
 }
 
 function heading() {
-  echo "<hr />"
+  hr_tag
   echo "<h1>$1</h1>"
 }
 
@@ -45,15 +45,70 @@ function hr_tag() {
   echo "<hr />"
 }
 
+
+function manga_template() {
+  cat <<TEMPLATE
+<html>
+  <head>
+    <style type="text/css">
+    img {
+      width: 90%;
+      margin: 10px;
+      text-align: center;
+    }
+    h1 {
+      font-size: 144pt;
+      border: dashed 2px red;
+      color: black;
+    }
+    </style>
+
+    <script src="file:///var/www/public/js/jquery.min.js" ></script>
+    <script type="text/javascript">
+      function jumpto(img) {
+        window.location = [window.location.pathname, \$(img).val()].join('#');
+      }
+    </script>
+  </head>
+  <body>
+    ${prev_link}
+    <hr />
+
+    <h1>${chapter_number}</h1>
+
+    <select onchange="jumpto(this);">
+      ${img_options}
+    </select>
+
+    <hr/>
+
+    ${img_tags}
+
+    <hr />
+
+    ${prev_link} ... ${next_link}
+</body>
+</html>
+TEMPLATE
+}
+
+function img_tag() {
+  cat <<IMG
+  <img id="${number}" title="${number}" src="${filename}" />
+IMG
+}
+
+
 i="index"
 p="$i"
 
 for z in 1
 do
-  manga_style >$i
+  manga_style >"${i}.html"
 
-  for a in *
+  for c in */
   do
+    a="${c%/}"
     ih="${i}.html"
     ph="${p}.html"
     ah="${a}.html"
