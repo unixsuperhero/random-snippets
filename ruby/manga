@@ -1,0 +1,114 @@
+#!/Users/jearsh/.rvm/rubies/ruby-2.0.0-p247/bin/ruby
+
+class MangaBook
+  attr_accessor :pwd
+
+  def initialize(path=Dir.pwd)
+    @pwd = path || Dir.pwd
+    @pages = {}
+    Dir.chdir(@pwd)
+  end
+
+  def chapters
+    @chapters ||= Dir.glob('*/')
+  end
+
+  def book
+    @book ||= chapters.inject({}) { |p,c|
+      p.merge(c.gsub(/\D/, '') => Dir.glob("#{c}*"))
+    }
+  end
+
+  def save
+    IO.write('index.html', index_template)
+    @prev = 'index'
+    @page = book.each
+    save_pages
+  end
+
+  def save_pages
+    while true
+      begin
+        @ch, @pgs = @page.next
+        IO.write("#{@ch}.html", page_template)
+        @prev = @ch
+      rescue
+        return 'done'
+      end
+    end
+  end
+
+  def img_tags
+    @pgs.map.with_index{|pg,i|
+      id = i + 1
+      sprintf('<img id="%d" title="%d" src="%s" />', id, id, pg)
+    }
+  end
+
+  def prev_link
+    sprintf('<a href="%s.html">&lt; Prev</a>', @prev)
+  end
+
+  def next_link
+    begin
+      ch,pgs = @page.peek
+      sprintf('<a href="%s.html">Next &gt;</a>', ch)
+    rescue
+      nil
+    end
+  end
+
+  def nav_links
+    [prev_link, next_link].compact.join(' ... ')
+  end
+
+  def chapter_links
+    book.map{|ch,pgs|
+      sprintf('<a href="%s.html">%s</a>', ch, ch)
+    }
+  end
+
+  def index_template
+    <<TEMPLATE
+    #{style}
+    #{chapter_links.join(' | ')}
+TEMPLATE
+  end
+
+  def page_template
+    <<TEMPLATE
+    #{style}
+    #{nav_links}
+    <hr/>
+    #{img_tags.join('<hr />')}
+    <hr/>
+    #{nav_links}
+TEMPLATE
+  end
+
+  def style
+    <<TEMPLATE
+    <style type="text/css">
+      img {
+        width: 90%;
+        margin: 10px;
+        text-align: center;
+      }
+      h1 {
+        font-size: 144pt;
+        border: dashed 2px red;
+        color: black;
+      }
+    </style>
+TEMPLATE
+  end
+
+  def open
+    system('open index.html')
+  end
+end
+
+book = MangaBook.new(ARGV[0])
+book.save
+book.open
+
