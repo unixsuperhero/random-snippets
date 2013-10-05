@@ -1,0 +1,36 @@
+#!/Users/jearsh/.rvm/rubies/ruby-1.9.3-p327/bin/ruby
+
+class CommonStats
+  def initialize(*args)
+    @data = (args || []).flatten
+  end
+
+  def min
+    @data.min
+  end
+
+  def max
+    @data.max
+  end
+
+  def mean
+    @data.inject(:+) / @data.count
+  end
+
+  def median
+    return 0 if (cnt = (sorted = (@data || []).sort).count) == 0
+    return sorted[cnt / 2] if cnt % 2 == 1
+    (sorted[half = cnt / 2] + sorted[half - 1]) / 2.to_f
+  end
+
+  def mode(all=false)
+    return (counts = @data.inject({}){|p,c| p.merge(c => p[c].to_i + 1)}).keep_if{|k,v| v == counts.max_by{|k,v| v}.last} if all
+    @data.inject({}){|p,c| p.merge(c => p[c].to_i + 1)}.max_by{|k,v| v}.first
+  end
+
+  def deviation
+    mx,md,mn = [max.abs, mean.abs, min.abs]
+    [mx - md, md - mn].max
+  end
+end
+
