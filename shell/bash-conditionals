@@ -1,0 +1,25 @@
+#!/bin/bash
+
+function process_lines() {
+
+  while read line
+  do
+    if [[ "$line" == *=* ]]
+    then
+      echo "The line '${line}' contains an equals symbol (=)."
+    else
+      echo "The line '${line}' DOES NOT CONTAIN an equals symbol (=)."
+    fi
+  done
+
+}
+
+cat <<LINES | process_lines
+3 + 3
+x = 1 + 1
+y = x * 3
+1 * 8
+2 + 2
+LINES
+
+

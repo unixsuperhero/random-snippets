@@ -1,0 +1,73 @@
+#!/bin/bash
+
+cat <<"METADATA" >/dev/null
+  NAME: clean_bc
+  DESCRIPTION:
+      Filter all the input being passed to _bc_, the
+    cli calculator.
+      Use it to make readable and pretty output of
+    the calculations and answers.
+
+      For example, take the input:
+
+        10 * 3
+        last / 3
+        last * 99
+
+      This could be output as something like this:
+
+        10 * 3 = 30
+        30 / 3 = 10
+        10 * 99 = 990
+
+      If I really wanted to get fancy, the output
+    could be something like this:
+
+            10
+        *    3
+        ------
+            30
+
+            30
+        /    3
+        ------
+            10
+
+            10
+        *   99
+        ------
+           990
+
+  AUTHOR: Joshua Toyota
+  DATE: 2013-09-09 23:48:23
+
+METADATA
+
+# Code goes here
+
+function process_math () {
+  while read l
+  do
+    if [[ "$l" == *=* ]]
+    then
+      echo "$l"
+      printf 'print "\\n%s  # ", %s, "\\n"\n' "$1" "${1%%=*}"
+      #echo 'print "' "$l" '  # ",' "$(echo "$l" | sed 's/=.*//')", '"\\n"'
+    else
+      echo "$1"
+      printf 'print "  # ", %s, "\\n"\n' "$1"
+      #echo 'print " # ", ' $1 ', "\\n"'
+    fi
+  done
+}
+
+cat <<MATH | process_math
+a = 10
+d = a * 99
+1 + 1
+2 * 9
+MATH
+
+
+
+
