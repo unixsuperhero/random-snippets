@@ -1,0 +1,18 @@
+#!/bin/bash
+
+:8s/name.goes.here/\=expand("%:t")/
+:13s/stam[p]/\=strftime("\%Y-\%m-\%d \%H:\%M:\%S")/
+:3,6d
+
+cat <<"METADATA" >/dev/null
+  NAME: name_goes_here
+  DESCRIPTION:
+    description_goes_here
+
+  AUTHOR: Joshua Toyota
+  DATE: stamp
+
+METADATA
+
+# Code goes here
+
