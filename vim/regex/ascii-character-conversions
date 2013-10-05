@@ -1,0 +1,14 @@
+
+" should be 97
+:call setline(5, char2nr('a'))
+
+97
+
+
+" should be a
+:call setline(11, nr2char(97))
+
+a
+
+
+

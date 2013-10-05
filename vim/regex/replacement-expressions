@@ -1,0 +1,16 @@
+
+" Main Body of Text
+one two three four
+
+" Search Pattern
+/one \(two\) three \(four\)/
+
+" Replacement Expression
+'\r' . submatch(0) . '\rsubmatch 1 = ' . submatch(1) . '\rsubmatch 2 = ' . submatch(2)
+
+" ALL TOGETHER
+
+  one two three four
+:13s/one \(two\) three \(four\)/\=submatch(0) . nr2char(13) . 'submatch 1 = ' . submatch(1) . nr2char(13) . 'submatch 2 = ' . submatch(2)/
+
+
