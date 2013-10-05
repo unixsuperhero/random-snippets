@@ -1,0 +1,64 @@
+#!/bin/bash
+
+function count_args ()
+{
+  c="$(printf "%02d" $#)"
+  cat <<COUNTS
+
+  ---------------------
+  -- Arg Count:  $c  --
+  ---------------------
+
+  ---------------------
+  --   With Quotes   --
+  ---------------------
+
+  \$@
+  $(
+    i=0
+    for a in "$@"
+    do
+      echo "${i} => ${a}"
+      i=$(( $i + 1 ))
+    done
+  )
+
+  \$*
+  $(
+    i=0
+    for a in "$*"
+    do
+      echo "${i} => ${a}"
+      i=$(( $i + 1 ))
+    done
+  )
+
+  ---------------------
+  -- Without  Quotes --
+  ---------------------
+
+  \$@
+  $(
+    i=0
+    for a in $@
+    do
+      echo "${i} => ${a}"
+      i=$(( $i + 1 ))
+    done
+  )
+
+  \$*
+  $(
+    i=0
+    for a in $*
+    do
+      echo "${i} => ${a}"
+      i=$(( $i + 1 ))
+    done
+  )
+
+COUNTS
+}
+
+count_args 'heroku config #-a' 'config' dryrun
+
