@@ -64,8 +64,8 @@ class FileNamer
   end
 
   def rename_file(from, to)
-    cmd = sprintf('mv "%s" "%s"', from, to)
-    puts "About to run:", "\t'#{cmd}'"
+    printf("rename from/to\n '%s'\n '%s'\n", from, to)
+    #puts "About to run:", "\t'#{cmd}'"
     system(cmd) if confirmed("Is it ok?")
   end
 
