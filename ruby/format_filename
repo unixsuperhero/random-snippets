@@ -27,7 +27,22 @@ class FileNamer
     @files = Dir.glob("#{dir}/*")
     @format = pick_format
     @episode = pick_episode_number
+    @template = pick_template
     rename_files
+  end
+
+  def pick_template
+    splits = @format.split(@episode)
+    return splits if splits.count <= 2
+    left = []
+    templates = 1.upto(splits.count - 1).map{
+      left << splits.shift
+      [left.join(@episode), splits.join(@episode)]
+    }
+    list_with_numbers templates.map{|t| t.join('(x)')}
+    print "Which (x) is where the episode # goes: "
+    ep = gets
+    templates[ep.to_i]
   end
 
   def confirmed(prompt="Continue...")
