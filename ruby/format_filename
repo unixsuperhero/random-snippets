@@ -57,11 +57,11 @@ class FileNamer
       templates = nums.map{|ep| new_filename ep }
       puts "Rename: \n '#{file}'\nAs:\n"
       list_with_numbers templates
+      puts '(*) ...skip...'
       print "Which filename uses the right episode number: "
       ep = gets
       next if ep.strip == ""
-      new_file = templates[ep.to_i]
-      rename_file file, new_file
+      rename_file file, templates[ep.to_i]
     end
   end
 
@@ -70,9 +70,8 @@ class FileNamer
   end
 
   def rename_file(from, to)
-    printf("rename from/to\n '%s'\n '%s'\n", from, to)
-    #puts "About to run:", "\t'#{cmd}'"
-    system(cmd) if confirmed("Is it ok?")
+    cmd = sprintf('mv "%s" "%s"', from, to)
+    system(cmd)
   end
 
   def list_files
