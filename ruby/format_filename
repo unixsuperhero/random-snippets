@@ -53,9 +53,15 @@ class FileNamer
 
   def rename_files
     @files.map do |file|
-      next unless confirmed("Do you want to rename '#{file}'")
-      ep = pick_episode_number(file)
-      rename_file file, new_filename(ep)
+      next if (nums = file.scan(/\d+/)).count == 0
+      templates = nums.map{|ep| new_filename ep }
+      puts "Rename: \n '#{file}'\nAs:\n"
+      list_with_numbers templates
+      print "Which filename uses the right episode number: "
+      ep = gets
+      next if ep.strip == ""
+      new_file = templates[ep.to_i]
+      rename_file file, new_file
     end
   end
 
