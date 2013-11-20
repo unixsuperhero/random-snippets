@@ -2,57 +2,34 @@
 
 function count_args ()
 {
-  c="$(printf "%02d" $#)"
   cat <<COUNTS
 
-  ---------------------
-  -- Arg Count:  $c  --
-  ---------------------
+count_args('heroku config #-a', 'config', dryrun)  # argc => $#
 
-  ---------------------
-  --   With Quotes   --
-  ---------------------
-
-  \$@
-  $(
-    i=0
-    for a in "$@"
+  ## With Quotes
+  [ "\$@" ] $( i=1; for a in "$@"
     do
-      echo "${i} => ${a}"
+      printf "(${i} =>) ${a} "
+      i=$(( $i + 1 ))
+    done
+  )
+  [ "\$*" ] $( i=1; for a in "$*"
+    do
+      printf "(${i} =>) ${a} "
       i=$(( $i + 1 ))
     done
   )
 
-  \$*
-  $(
-    i=0
-    for a in "$*"
+  ## Without Quotes
+  [ \$@ ] $( i=1; for a in $@
     do
-      echo "${i} => ${a}"
+      printf "(${i} =>) ${a} "
       i=$(( $i + 1 ))
     done
   )
-
-  ---------------------
-  -- Without  Quotes --
-  ---------------------
-
-  \$@
-  $(
-    i=0
-    for a in $@
+  [ \$* ] $( i=1; for a in $*
     do
-      echo "${i} => ${a}"
-      i=$(( $i + 1 ))
-    done
-  )
-
-  \$*
-  $(
-    i=0
-    for a in $*
-    do
-      echo "${i} => ${a}"
+      printf "(${i} =>) ${a} "
       i=$(( $i + 1 ))
     done
   )
@@ -61,4 +38,45 @@ COUNTS
 }
 
 count_args 'heroku config #-a' 'config' dryrun
+
+function function-arg-passing-one() {
+  cat <<DIAG
+WAYS TO PASS ARGS FROM 1 FUNCTION TO ANOTHER:
+
+function-arg-passing-one(one, 'two with spaces', three, 'four with spaces')
+  (# =>) $# (1 =>) $1 (2 =>) $2 (3 =>) $3 (4 =>) $4
+
+  function-arg-passing-two("\$@")  ## IDEAL METHOD
+    $(function-arg-passing-two "$@")
+
+  function-arg-passing-two(\$*)
+    $(function-arg-passing-two $*)
+
+DIAG
+}
+
+function function-arg-passing-two() {
+cat <<<"(# =>) ${#@} (1 =>) $1 (2 =>) $2 (3 =>) $3 (4 =>) $4"
+}
+function-arg-passing-one one 'two with spaces' three 'four with spaces'
+
+function shift-args() {
+  cat <<DIAG
+shift-args(-n, two, three, four)
+  (@ =>) $@ (# =>) $# (1 =>) $1 (2 =>) $2 (3 =>) $3
+
+    shifting...
+
+DIAG
+
+  first="$1"
+  shift
+
+  cat <<DIAG
+  (@ =>) $@ (# =>) $# (1 =>) $1 (2 =>) $2 (3 =>) $3
+
+    first => '$first'  ## backup from before calling shift
+DIAG
+}
+shift-args -n two three four
 
