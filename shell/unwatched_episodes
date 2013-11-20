@@ -12,16 +12,25 @@ cat <<"METADATA" >/dev/null
 METADATA
 
 watched_file="watched.grep"
+global_watched_file="$HOME/Desktop/Anime/global.watched.grep"
 
 start_dir="$(pwd)"
+unwatched_dir="$HOME/Desktop/Anime"
 
-cd ~/Desktop/Anime
+[[ -n "$1" ]] && unwatched_dir="$1"
+
+cd $unwatched_dir
 
 echo
-
-for series in */*/
+find . -iname $watched_file | grep -v '^..watched.grep$' | while read wf
 do
-  find "${series%/}" -type f | grep -vf "${series}/${watched_file}" 2>/dev/null && echo
+  d="$(dirname "$wf")"
+  lines="$(find "$d" -type f | grep -vf "$wf" -f "$global_watched_file" 2>/dev/null)"
+
+  if [[ -n "$lines" ]]; then
+    echo "$lines"
+    echo
+  fi
 done | less
 
 cd "$start_dir"

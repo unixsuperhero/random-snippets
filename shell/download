@@ -28,19 +28,24 @@ function dl-link  () {
 
   echo "link => $link"
   echo "name => $name"
+  echo "download \"$link\" \"$name\""
 
-  echo "$link" >>~/Desktop/Anime/download_links
-  echo "$(pwd)/$name" >>~/Desktop/Anime/download_files
-  echo "cd \"$(pwd)\" && wget -cO \"$name\" \"$link\"" >>~/Desktop/Anime/download_cmds
+  if [[ $dry == "true" ]]; then
+    echo "wget -cO \"$name\" \"$link\""
+  else
+    echo "$link" >>~/Desktop/Anime/download_links
+    echo "$(pwd)/$name" >>~/Desktop/Anime/download_files
+    echo "cd \"$(pwd)\" && wget -cO \"$name\" \"$link\"" >>~/Desktop/Anime/download_cmds
 
-  [[ $dry == "true" ]] && echo "wget -cO \"$name\" \"$link\"" || wget -cO "$name" "$link"
+    wget -cO "$name" "$link"
+  fi
 }
 
 
 [[ "$1" == '--edit' ]] && vim "$0" || dl-link "$@"
 
 
-cat <<"TODOLIST" >/dev/null
+cat <<TODOLIST >/dev/null
 
 * Manage my personal lists better, like this list
 * Join flashcards/studying sites:
