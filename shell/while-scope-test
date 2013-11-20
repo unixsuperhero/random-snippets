@@ -1,0 +1,6 @@
+echo "$final" | while read line
+do
+  final="$(echo "$final" | grep -v "$(dirname "$line" | sed 's/[^a-zA-Z0-9]/./g')$")"
+  export final
+  echo "$line && $(echo "$final" | tail -1)" && eql? => $(test "$line" -eq "$(echo "$final" | tail -1)")"
+done

@@ -1,0 +1,9 @@
+#!/bin/bash
+
+(
+  cd ~/Desktop/Anime
+  for a in */
+  do
+    (cd "$a"; next_episode asdf)
+  done
+)

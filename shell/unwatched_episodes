@@ -19,9 +19,9 @@ cd ~/Desktop/Anime
 
 echo
 
-for series in */
+for series in */*/
 do
-  find "${series%/}" -type f | grep -vf "${series}${watched_file}" 2>/dev/null && echo
+  find "${series%/}" -type f | grep -vf "${series}/${watched_file}" 2>/dev/null && echo
 done | less
 
 cd "$start_dir"
