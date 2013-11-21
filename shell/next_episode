@@ -15,6 +15,7 @@ METADATA
 
 watched_file="watched.grep"
 global_watched_file="$HOME/Desktop/Anime/global.watched.grep"
+recent_file="/Users/jearsh/Desktop/Anime/recently_watched"
 
 function vlc_next_episode()
 {
@@ -28,6 +29,7 @@ function vlc_next_episode()
 
     ## Passing any args results in a dry-run
     if [[ -z "$1" ]]; then
+      echo "$(pwd)/$next" >>$recent_file
       echo "$next" | sed 's/[.]/\\./g;s/[^a-zA-Z0-9.\\-][^a-zA-Z0-9.\\-]*/.*/g' >>$watched_file
       open -a vlc "$next"
     else
