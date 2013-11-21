@@ -11,27 +11,34 @@ cat <<"METADATA" >/dev/null
 
 METADATA
 
-watched_file="watched.grep"
-global_watched_file="$HOME/Desktop/Anime/global.watched.grep"
+list_episodes() {
 
-start_dir="$(pwd)"
-unwatched_dir="$HOME/Desktop/Anime"
+  [[ "$1" == '--edit' ]] && vim "$0" && return 0
 
-[[ -n "$1" ]] && unwatched_dir="$1"
+  watched_file="watched.grep"
+  global_watched_file="$HOME/Desktop/Anime/global.watched.grep"
 
-cd $unwatched_dir
+  start_dir="$(pwd)"
+  unwatched_dir="$HOME/Desktop/Anime"
 
-echo
-find . -iname $watched_file | grep -v '^..watched.grep$' | while read wf
-do
-  d="$(dirname "$wf")"
-  lines="$(find "$d" -type f | grep -vf "$wf" -f "$global_watched_file" 2>/dev/null)"
+  [[ -n "$1" ]] && unwatched_dir="$1"
 
-  if [[ -n "$lines" ]]; then
-    echo "$lines"
-    echo
-  fi
-done | less
+  cd $unwatched_dir
 
-cd "$start_dir"
+  echo
+  find . -iname $watched_file | grep -v '^..watched.grep$' | while read wf
+  do
+    d="$(dirname "$wf")"
+    lines="$(find "$d" -type f | grep -vf "$wf" -f "$global_watched_file" 2>/dev/null)"
+
+    if [[ -n "$lines" ]]; then
+      echo "$lines"
+      echo
+    fi
+  done | less
+
+  cd "$start_dir"
+}
+
+list_episodes "$@"
 
