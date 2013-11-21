@@ -29,7 +29,7 @@ list_episodes() {
   find "$PWD" -iname $watched_file | grep -v "$HOME/Desktop/Anime/watched.grep" | while read wf
   do
     d="$(dirname "$wf")"
-    lines="$(find "$d" -type f | grep -vf "$wf" -f "$global_watched_file" 2>/dev/null)"
+    lines="$(find "$d" -type f | grep -vf <(cat "$wf" "$global_watched_file") 2>/dev/null)"
 
     if [[ -n "$lines" ]]; then
       echo "$lines"
