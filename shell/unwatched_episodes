@@ -23,10 +23,10 @@ list_episodes() {
 
   [[ -n "$1" ]] && unwatched_dir="$1"
 
-  cd $unwatched_dir
+  cd "$unwatched_dir"
 
   echo
-  find . -iname $watched_file | grep -v '^..watched.grep$' | while read wf
+  find "$PWD" -iname $watched_file | grep -v "$HOME/Desktop/Anime/watched.grep" | while read wf
   do
     d="$(dirname "$wf")"
     lines="$(find "$d" -type f | grep -vf "$wf" -f "$global_watched_file" 2>/dev/null)"
@@ -35,7 +35,7 @@ list_episodes() {
       echo "$lines"
       echo
     fi
-  done | less
+  done | sed "s@$HOME/Desktop/Anime/@@" | less
 
   cd "$start_dir"
 }
