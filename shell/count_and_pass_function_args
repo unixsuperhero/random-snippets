@@ -39,30 +39,30 @@ COUNTS
 
 count_args 'heroku config #-a' 'config' dryrun
 
-function function-arg-passing-one() {
+function function_arg_passing_one() {
   cat <<DIAG
 WAYS TO PASS ARGS FROM 1 FUNCTION TO ANOTHER:
 
-function-arg-passing-one(one, 'two with spaces', three, 'four with spaces')
+function_arg_passing_one(one, 'two with spaces', three, 'four with spaces')
   (# =>) $# (1 =>) $1 (2 =>) $2 (3 =>) $3 (4 =>) $4
 
-  function-arg-passing-two("\$@")  ## IDEAL METHOD
-    $(function-arg-passing-two "$@")
+  function_arg_passing_two("\$@")  ## IDEAL METHOD
+    $(function_arg_passing_two "$@")
 
-  function-arg-passing-two(\$*)
-    $(function-arg-passing-two $*)
+  function_arg_passing_two(\$*)
+    $(function_arg_passing_two $*)
 
 DIAG
 }
 
-function function-arg-passing-two() {
+function function_arg_passing_two() {
 cat <<<"(# =>) ${#@} (1 =>) $1 (2 =>) $2 (3 =>) $3 (4 =>) $4"
 }
-function-arg-passing-one one 'two with spaces' three 'four with spaces'
+function_arg_passing_one one 'two with spaces' three 'four with spaces'
 
-function shift-args() {
+function shift_args() {
   cat <<DIAG
-shift-args(-n, two, three, four)
+shift_args(-n, two, three, four)
   (@ =>) $@ (# =>) $# (1 =>) $1 (2 =>) $2 (3 =>) $3
 
     shifting...
@@ -78,5 +78,5 @@ DIAG
     first => '$first'  ## backup from before calling shift
 DIAG
 }
-shift-args -n two three four
+shift_args -n two three four
 
