@@ -31,11 +31,14 @@ function dl-link  () {
   echo "download \"$link\" \"$name\""
 
   if [[ $dry == "true" ]]; then
+    echo "$link"
+    echo "$(pwd)/$name"
+    echo "cd \"$(pwd)\" && wget -cO \"$name\" \"$link\""
     echo "wget -cO \"$name\" \"$link\""
   else
-    echo "$link" >>~/Desktop/Anime/download_links
-    echo "$(pwd)/$name" >>~/Desktop/Anime/download_files
-    echo "cd \"$(pwd)\" && wget -cO \"$name\" \"$link\"" >>~/Desktop/Anime/download_cmds
+    echo "$link" | tee -a ~/Desktop/Anime/download_links
+    echo "$(pwd)/$name" | tee -a ~/Desktop/Anime/download_files
+    echo "cd \"$(pwd)\" && wget -cO \"$name\" \"$link\"" | tee -a ~/Desktop/Anime/download_cmds
 
     wget -cO "$name" "$link"
   fi
