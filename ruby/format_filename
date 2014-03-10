@@ -1,4 +1,4 @@
-#!/Users/jearsh/.rvm/rubies/ruby-2.0.0-p247/bin/ruby
+#!/Users/MacbookPro/.rbenv/versions/2.0.0-p247/bin/ruby
 
 # 2.0.0-p247 :002 > files = Dir.glob('*')
 #  => ["Watamote - 03.mp4", "watamote 4.mp4", "Watamote Episode 5.mp4", "Watashi ga Motenai no Episode 6.mp4", "Watashi ga Motenai no wa Dou Kangaetemo Episode 1.mp4", "Watashi ga Motenai no wa Dou Kangaetemo Omaera ga Warui! Episode 2.mp4", "watched.grep"]
