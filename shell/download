@@ -14,6 +14,7 @@ cat <<"METADATA" >/dev/null
 METADATA
 
 mkdir -pv ~/Desktop/Anime/this-season
+mkdir -pv ~/logs
 
 function dl-link  () {
 
@@ -38,9 +39,9 @@ function dl-link  () {
     echo "cd \"$(pwd)\" && wget -bcO \"$name\" \"$link\""
     echo "wget -bcO \"$name\" \"$link\""
   else
-    echo "$link" | tee -a ~/Desktop/Anime/download_links
-    echo "$(pwd)/$name" | tee -a ~/Desktop/Anime/download_files
-    echo "cd \"$(pwd)\" && wget -bcO \"$name\" \"$link\"" | tee -a ~/Desktop/Anime/download_cmds
+    echo "$link" | tee -a ~/logs/download_links
+    echo "$(pwd)/$name" | tee -a ~/logs/download_files
+    echo "cd \"$(pwd)\" && wget -bcO \"$name\" \"$link\"" | tee -a ~/logs/download_cmds
 
     wget -bcO "$name" "$link"
   fi

@@ -16,17 +16,17 @@ list_episodes() {
   [[ "$1" == '--edit' ]] && vim "$0" && return 0
 
   watched_file="watched.grep"
-  global_watched_file="$HOME/Desktop/Anime/global.watched.grep"
+  global_watched_file="$HOME/logs/global.watched.grep"
 
   start_dir="$(pwd)"
-  unwatched_dir="$HOME/Desktop/Anime"
+  unwatched_dir="$HOME/logs"
 
   [[ -n "$1" ]] && unwatched_dir="$1"
 
   cd "$unwatched_dir"
 
   echo
-  find "$PWD" -iname $watched_file | grep -v "$HOME/Desktop/Anime/watched.grep" | while read wf
+  find "$PWD" -iname $watched_file | grep -v "$HOME/logs/watched.grep" | while read wf
   do
     d="$(dirname "$wf")"
     lines="$(find "$d" -type f | grep -vf <(cat "$wf" "$global_watched_file") 2>/dev/null)"
@@ -35,7 +35,7 @@ list_episodes() {
       echo "$lines"
       echo
     fi
-  done | sed "s@$HOME/Desktop/Anime/@@" | less
+  done | sed "s@$HOME/logs/@@" | less
 
   cd "$start_dir"
 }
